@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY ./ ./
 
-RUN dotnet publish Api.ResultJobAssessment.csproj -c release -o /out
+RUN dotnet publish app.csproj -c release -o /out
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
@@ -14,4 +14,4 @@ COPY --from=build /out ./
 
 EXPOSE 80
 
-ENTRYPOINT ["dotnet", "Api.ResultJobAssessment.dll"]
+ENTRYPOINT ["dotnet", "app.dll"]
