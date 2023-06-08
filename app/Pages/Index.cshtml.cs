@@ -5,16 +5,27 @@ namespace app.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
-    public string oi;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    private readonly MyContext _context;
+    public IndexModel(MyContext context)
     {
-        _logger = logger;
+       _context = context;
     }
 
-    public void OnGet()
+    public IActionResult OnGetPublish(string email, string conteudo)
     {
-        oi = "oi";
+        var post = new Post{
+            Email = email,
+            Conteudo = conteudo,
+            Data = DateTime.Now()
+        }
+        _context.Post.Add(post);
+        _context.SaveChanges();
+        return new JsonResult(new { Post = post})
+    }
+
+    public IActionResult OnGetObtains()
+    {
+        var list = _context.Post.OrderByDescending(e=> e.Data).ToList()
+        return new JsonResult(new { List = list});
     }
 }

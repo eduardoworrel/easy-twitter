@@ -1,10 +1,54 @@
 ﻿@page
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">@Model.oi</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (SignInManager.IsSignedIn(User))
+{
+    <div>
+        <textarea id="conteudo"></textarea>
+        <button id="action">Publicar</button>
+    </div>
+}
+
+<div id="lista"></div>
+
+<script>
+    const conteudo = document.getElementById("conteudo")
+    const action = document.getElementById("action")
+    const lista = document.getElementById("lista")
+    
+    const email = '@User.Identity?.Name'
+
+    action.onclick = function(){
+        const conteudoDigitado = conteudo.value;
+        fetch("?handler=Publish&email="+email+"&conteudo="+conteudo)
+        .then(e => e.json())
+        .then(data =>{
+            const div = document.createElement("div");
+            div.innerHTML = `
+                <b>${data.email}</b> : ${data.conteudo} - ${data.data}
+            `
+            lista.append(div)
+        })
+    }
+
+    fetch("?handler=Obtains")
+    .then(e => e.json())
+    .then(data =>{
+        for(let item of data.list)
+        {
+            const div = document.createElement("div");
+            div.innerHTML = `
+                <b>${data.email}</b> : ${data.conteudo} - ${data.data}
+            `
+            lista.append(div)
+        }
+    })
+</script>
