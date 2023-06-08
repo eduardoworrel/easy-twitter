@@ -28,14 +28,14 @@
 
     action.onclick = function(){
         const conteudoDigitado = conteudo.value;
-        fetch("?handler=Publish&email="+email+"&conteudo="+conteudo)
+        fetch("?handler=Publish&email="+email+"&conteudo="+conteudoDigitado)
         .then(e => e.json())
         .then(data =>{
             const div = document.createElement("div");
             div.innerHTML = `
-                <b>${data.email}</b> : ${data.conteudo} - ${data.data}
+                <b>${data.post.email}</b> : ${data.post.conteudo} - ${data.post.data}
             `
-            lista.append(div)
+            lista.prepend(div)
         })
     }
 
@@ -46,7 +46,7 @@
         {
             const div = document.createElement("div");
             div.innerHTML = `
-                <b>${data.email}</b> : ${data.conteudo} - ${data.data}
+                <b>${item.email}</b> : ${item.conteudo} - ${item.data}
             `
             lista.append(div)
         }

@@ -16,16 +16,16 @@ public class IndexModel : PageModel
         var post = new Post{
             Email = email,
             Conteudo = conteudo,
-            Data = DateTime.Now()
-        }
-        _context.Post.Add(post);
+            Data = DateTime.Now
+        };
+        _context.Posts.Add(post);
         _context.SaveChanges();
-        return new JsonResult(new { Post = post})
+        return new JsonResult(new { Post = post});
     }
 
     public IActionResult OnGetObtains()
     {
-        var list = _context.Post.OrderByDescending(e=> e.Data).ToList()
+        var list = _context.Posts.OrderByDescending(e=> e.Data).ToList();
         return new JsonResult(new { List = list});
     }
 }
